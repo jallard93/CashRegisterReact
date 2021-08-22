@@ -1,6 +1,7 @@
 import React from "react";
 import Display from "./Display.js"
 import RegisterButton from "./RegisterButton.js";
+import $ from "jquery";
 
 /*
 TODO:
@@ -60,9 +61,10 @@ class CashRegister extends React.Component {
         } else if (this.state.enteringPaymentPrice) {
             this.payment = this.state.displayText;
             // calculate new display text for change amount HERE
-            let change = "Change entered here";
+            let changeArray = this.callCashRegisterApi();
+            let change = changeArray.reduce((a, b) => a + b, 0)
             this.setState({
-                displayText: 1000,
+                displayText: change,
                 prompt: "Change Amount:",
                 enteringPurchasePrice: false,
                 enteringPaymentPrice: !this.state.enteringPaymentPrice
@@ -75,6 +77,26 @@ class CashRegister extends React.Component {
                 enteringPaymentPrice: false
             })
         }
+    }
+
+    callCashRegisterApi() {
+        let response = $.ajax({
+            url:'https://l6za7byfzc.execute-api.us-east-1.amazonaws.com/api/cashregister/change',
+            async: false,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "purchasePrice": this.purchase,
+                "paymentAmount": this.payment,
+                "billCounts": "[5, 5, 5, 5, 5, 5, 5, 5, 5]",
+                "totalBills": 45
+            }),
+            dataType: "json",
+            method: "POST"
+        });
+
+        let change = response.responseJSON.change;
+
+        return change;
     }
 
     parseDisplayText(displayText, eventChar) {
