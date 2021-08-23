@@ -33,8 +33,25 @@
   padding-right: 7%;
   padding-top: 4%;
   padding-bottom: 4%;
-  border-radius: 20%;
+  outline: none !important;
+  border-radius: 5%;
   margin: 1%;
+}
+
+.Register-drawer {
+  background-color: #7e807f;
+  color: #000;
+  font-size: calc(8px + 2vmin);
+}
+
+.Register-drawer, .Register-button {
+  font-family: "Courier", monospace;
+}
+
+.Register-drawers {
+  outline-style: solid;
+  outline-width: thin;
+  outline-color: black;
 }
 
 .Register-right {

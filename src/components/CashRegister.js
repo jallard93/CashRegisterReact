@@ -1,7 +1,7 @@
 import React from "react";
 import Display from "./Display.js"
 import RegisterButton from "./RegisterButton.js";
-import $ from "jquery";
+import $, { timers } from "jquery";
 
 /*
 TODO:
@@ -20,21 +20,46 @@ class CashRegister extends React.Component {
 
         this.purchase = 0;
         this.payment = 0;
+        this.billCounts = {
+            0.01: 10,
+            0.05: 10,
+            0.10: 10,
+            0.25: 10,
+            0.50: 10,
+            1.00: 10,
+            5.00: 10,
+            10.00: 10,
+            20.00: 10
+        }
+        this.totalBills = Object.values(this.billCounts).reduce((a, b) => a + b, 0);
 
         this.handleClick = this.handleClick.bind(this);
         this.handleEnter = this.handleEnter.bind(this);
-        this.handleCalculateChange = this.handleCalculateChange.bind(this);
+        this.handleOpenDrawer = this.handleOpenDrawer.bind(this);
+        this.handleReset = this.handleReset.bind(this);
     }
 
-    handleCalculateChange() {
+    handleReset() {
         this.purchase = 0;
         this.payment = 0;
+
+        this.billCounts = {
+            0.01: 10,
+            0.05: 10,
+            0.10: 10,
+            0.25: 10,
+            0.50: 10,
+            1.00: 10,
+            5.00: 10,
+            10.00: 10,
+            20.00: 10
+        }
 
         this.setState({
             displayText: 0,
             prompt: "Purchase Price:", 
             enteringPurchasePrice: true,
-            enteringPaymentPrice: false
+            enteringPaymentPrice: false,
         })
     }
 
@@ -73,9 +98,17 @@ class CashRegister extends React.Component {
                 displayText:0,
                 prompt: "Purchase Price:",
                 enteringPurchasePrice: true,
-                enteringPaymentPrice: false
+                enteringPaymentPrice: false,
+                drawerOpen: false
             })
         }
+    }
+
+    handleOpenDrawer() {
+        let drawerOpen = !this.state.drawerOpen;
+        this.setState({
+            drawerOpen: drawerOpen
+        });
     }
 
     callCashRegisterApi() {
@@ -86,14 +119,20 @@ class CashRegister extends React.Component {
             data: JSON.stringify({
                 "purchasePrice": this.purchase,
                 "paymentAmount": this.payment,
-                "billCounts": "[5, 5, 5, 5, 5, 5, 5, 5, 5]",
-                "totalBills": 45
+                "billCounts": String(Object.values(this.billCounts)),
+                "totalBills": this.totalBills
             }),
             dataType: "json",
             method: "POST"
         });
 
         let change = response.responseJSON.change;
+
+        // update the change drawer
+        for (let i=0; i < change.length; i++) {
+            let bill = change[i];
+            this.billCounts[bill] = this.billCounts[bill] - 1;
+        }
 
         return change;
     }
@@ -132,43 +171,60 @@ class CashRegister extends React.Component {
 
     render() {
         return (
-            <div className="Cash-Register container">
-                <div className="Register-buttons col-md-6">
-                    <div className="container">
-                        <div className="row">
-                            <RegisterButton name="1" onClick={this.handleClick} />
-                            <RegisterButton name="2" onClick={this.handleClick} />
-                            <RegisterButton name="3" onClick={this.handleClick} />
-                        </div>
-                        <div className="row">
-                            <RegisterButton name="4" onClick={this.handleClick} />
-                            <RegisterButton name="5" onClick={this.handleClick} />
-                            <RegisterButton name="6" onClick={this.handleClick} />
-                        </div>
-                        <div className="row">
-                            <RegisterButton name="7" onClick={this.handleClick} />
-                            <RegisterButton name="8" onClick={this.handleClick} />
-                            <RegisterButton name="9" onClick={this.handleClick} />
-                        </div>
-                        <div className="row">
-                            <RegisterButton name="0" onClick={this.handleClick} />
-                            <RegisterButton name="." onClick={this.handleClick} />
-                            <RegisterButton name="Delete" onClick={this.handleClick} />
+            <div className="container">
+                <div className="Cash-Register row">
+                    <div className="Register-buttons col-md-6">
+                        <div className="container">
+                            <div className="row">
+                                <RegisterButton name="1" onClick={this.handleClick} />
+                                <RegisterButton name="2" onClick={this.handleClick} />
+                                <RegisterButton name="3" onClick={this.handleClick} />
+                            </div>
+                            <div className="row">
+                                <RegisterButton name="4" onClick={this.handleClick} />
+                                <RegisterButton name="5" onClick={this.handleClick} />
+                                <RegisterButton name="6" onClick={this.handleClick} />
+                            </div>
+                            <div className="row">
+                                <RegisterButton name="7" onClick={this.handleClick} />
+                                <RegisterButton name="8" onClick={this.handleClick} />
+                                <RegisterButton name="9" onClick={this.handleClick} />
+                            </div>
+                            <div className="row">
+                                <RegisterButton name="0" onClick={this.handleClick} />
+                                <RegisterButton name="." onClick={this.handleClick} />
+                                <RegisterButton name="Delete" onClick={this.handleClick} />
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="Register-right col-md-6">
-                    <div className="Register-display">
-                        <Display amount={this.state.displayText} prompt={this.state.prompt} />
+                    <div className="Register-right col-md-6">
+                        <div className="Register-display">
+                            <Display amount={this.state.displayText} prompt={this.state.prompt} />
+                        </div>
+                        <div className="Register-right-buttons">
+                            <RegisterButton name="Reset" onClick={this.handleReset}/>
+                            <RegisterButton name="Enter" onClick={this.handleEnter} />
+                            <RegisterButton name="Open Drawer" onClick={this.handleOpenDrawer}/>
+                        </div>
                     </div>
-                    <div className="Register-right-buttons">
-                        <RegisterButton name="Reset" onClick={this.handleCalculateChange}/>
-                        <RegisterButton name="Enter" onClick={this.handleEnter} />
-                        <RegisterButton name="Open Drawer" />
-                    </div>
-                    
                 </div>
+                {this.state.drawerOpen  &&
+                    <div className="Register-drawer row">
+                        <div className="col Register-drawers">Pennies: {this.billCounts[0.01]}</div>
+                        <div className="col Register-drawers">Nickels: {this.billCounts[0.05]}</div>
+                        <div className="col Register-drawers">Dimes: {this.billCounts[0.10]}</div>
+                        <div className="col Register-drawers">Quarters: {this.billCounts[0.25]}</div>
+                        <div className="col Register-drawers">Halves: {this.billCounts[0.50]}</div>
+                        <div className="col Register-drawers">$1: {this.billCounts[1.00]}</div>
+                        <div className="col Register-drawers">$5: {this.billCounts[5.00]}</div>
+                        <div className="col Register-drawers">$10: {this.billCounts[10.00]}</div>
+                        <div className="col Register-drawers">$20: {this.billCounts[20.00]}</div>
+                    </div>
+                }
+                
+
+                
             </div>
         )
     }
