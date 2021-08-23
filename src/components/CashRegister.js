@@ -142,7 +142,7 @@ class CashRegister extends React.Component {
             method: "POST"
         });
 
-        let change = response.responseJSON.change;
+        let change = JSON.parse(response.responseJSON).change;
 
         // update the change drawer
         for (let i=0; i < change.length; i++) {
