@@ -1,5 +1,11 @@
+@font-face{
+  font-family: "digital-7";
+  src: url(https://cashregister-resources.s3.amazonaws.com/digital-7.ttf) format("truetype");
+}
+
 .App {
   text-align: center;
+  font-family: "digital-7", sans-serif;
 }
 
 .App-header {
@@ -9,18 +15,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(25px + 2vmin);
   color: white;
 }
 
 .Cash-Register {
-  background-color: #8f8f8f;
+  background-color: #ababab;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 5%;
 }
 
 .Register-button {
+  background-color: #7e807f;
   padding-left: 7%;
   padding-right: 7%;
   padding-top: 4%;
@@ -30,25 +38,32 @@
 }
 
 .Register-right {
-  width: 10em;
-  height: 20em;
-  padding: 2em;
+  width: 50%;
+  height: 50%;
+  padding: 2%;
   display: flex;
   flex-direction: column;
-  align-content: flex-end;
+  align-items: center;
 }
 
-.Register-left {
-  display: flex;
-  justify-content: start;
-}
-
-.Register-left {
-  width: 20em;
-  height: 20em;
+.Register-display {
+  width: 50%;
+  padding-right: 5%;
 }
 
 .Register-right-buttons {
-  justify-self: flex-end;
+  padding-top: 10%;
+  padding-left: 50%;
+}
+
+label {
+  background-color: #636464;
+  color:#000;
+}
+
+input[type="text"], textarea {
+  text-align:right;
+  background-color : #000; 
+  color: #0f0
 }
 

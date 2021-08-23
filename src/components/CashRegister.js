@@ -7,7 +7,6 @@ import $ from "jquery";
 TODO:
     - Make pretty
     - Finish writing out tests to be more general
-    - Begin API integration
 */
 
 class CashRegister extends React.Component {
@@ -134,7 +133,7 @@ class CashRegister extends React.Component {
     render() {
         return (
             <div className="Cash-Register container">
-                <div className="Register-buttons col-md-8">
+                <div className="Register-buttons col-md-6">
                     <div className="container">
                         <div className="row">
                             <RegisterButton name="1" onClick={this.handleClick} />
@@ -159,13 +158,14 @@ class CashRegister extends React.Component {
                     </div>
                 </div>
 
-                <div className="Register-right col-lg-4">
+                <div className="Register-right col-md-6">
                     <div className="Register-display">
                         <Display amount={this.state.displayText} prompt={this.state.prompt} />
                     </div>
                     <div className="Register-right-buttons">
                         <RegisterButton name="Reset" onClick={this.handleCalculateChange}/>
                         <RegisterButton name="Enter" onClick={this.handleEnter} />
+                        <RegisterButton name="Open Drawer" />
                     </div>
                     
                 </div>

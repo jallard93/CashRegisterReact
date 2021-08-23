@@ -9,6 +9,8 @@ function App() {
       integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" 
       crossorigin="anonymous"></link>
 
+      <link href="https://cashregister-resources.s3.amazonaws.com/digital-7.ttf" rel="stylesheet"></link>
+
       <header className="App-header">
         <CashRegister/>
       </header>
