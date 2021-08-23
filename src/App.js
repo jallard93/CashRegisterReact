@@ -12,7 +12,6 @@ function App() {
       <link href="https://cashregister-resources.s3.amazonaws.com/digital-7.ttf" rel="stylesheet"></link>
 
       <header className="App-header">
-        Cash Register Clerk Simulator
         <CashRegister/>
       </header>
     </div>

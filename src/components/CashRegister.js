@@ -1,6 +1,7 @@
 import React from "react";
 import Display from "./Display.js"
 import RegisterButton from "./RegisterButton.js";
+import ChangeList from "./ChangeList"
 import $, { timers } from "jquery";
 
 /*
@@ -15,7 +16,10 @@ class CashRegister extends React.Component {
         this.state = {
             displayText: 0,
             prompt: "Purchase Price:",
-            enteringPurchasePrice: true
+            enteringPurchasePrice: true,
+            enteringPaymentPrice: false,
+            showChange: false,
+            change: []
         };
 
         this.purchase = 0;
@@ -35,8 +39,9 @@ class CashRegister extends React.Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.handleEnter = this.handleEnter.bind(this);
-        this.handleOpenDrawer = this.handleOpenDrawer.bind(this);
         this.handleReset = this.handleReset.bind(this);
+        this.handleCloseButton = this.handleCloseButton.bind(this);
+        this.handleOpenDrawer = this.handleOpenDrawer.bind(this);
     }
 
     handleReset() {
@@ -60,6 +65,8 @@ class CashRegister extends React.Component {
             prompt: "Purchase Price:", 
             enteringPurchasePrice: true,
             enteringPaymentPrice: false,
+            showChange: false,
+            change: []
         })
     }
 
@@ -91,7 +98,9 @@ class CashRegister extends React.Component {
                 displayText: change,
                 prompt: "Change Amount:",
                 enteringPurchasePrice: false,
-                enteringPaymentPrice: !this.state.enteringPaymentPrice
+                enteringPaymentPrice: !this.state.enteringPaymentPrice,
+                showChange: true,
+                change: changeArray
             })
         } else {
             this.setState({
@@ -99,7 +108,8 @@ class CashRegister extends React.Component {
                 prompt: "Purchase Price:",
                 enteringPurchasePrice: true,
                 enteringPaymentPrice: false,
-                drawerOpen: false
+                drawerOpen: false,
+                showChange: false
             })
         }
     }
@@ -108,6 +118,12 @@ class CashRegister extends React.Component {
         let drawerOpen = !this.state.drawerOpen;
         this.setState({
             drawerOpen: drawerOpen
+        });
+    }
+
+    handleCloseButton() {
+        this.setState({
+            showChange:false
         });
     }
 
@@ -169,9 +185,20 @@ class CashRegister extends React.Component {
         return newText
     }
 
+
     render() {
         return (
             <div className="container">
+                <div className="Change-display">
+                    {this.state.showChange && 
+                        <div className="Change-panel">
+                            <button className="Close-button" onClick={this.handleCloseButton}>×</button>
+                            Change:
+                            <ChangeList change={this.state.change}/>
+                        </div>
+                    }
+                </div>
+                Cash Register Clerk Simulator
                 <div className="Cash-Register row">
                     <div className="Register-buttons col-md-6">
                         <div className="container">

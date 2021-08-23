@@ -38,6 +38,10 @@
   margin: 1%;
 }
 
+.Register-button:hover {
+  cursor: pointer;
+}
+
 .Register-drawer {
   background-color: #7e807f;
   color: #000;
@@ -73,6 +77,56 @@
   padding-left: 50%;
 }
 
+.Change-display {
+  min-width: 100%;
+  z-index: 1;
+}
+
+.Change-panel {
+  color: black;
+  width: 25%;
+  position: fixed;
+  z-index: 1;
+  height: 50%;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.6);
+  overflow-x: hidden;
+  transition: 0.5s;
+  text-align: left;
+  padding: 3%;
+  font-family: "Courier", monospace;
+}
+
+.Change-button {
+  color: #fff;
+  background-color: #393f49;
+  border: none!important;
+  outline: none !important;
+  position: relative;
+  right: 50%;
+}
+
+.Change-button:hover {
+  background-color: #444;
+  outline: none !important;
+  cursor: pointer;
+}
+
+.Close-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0);
+  outline: none !important;
+  border: none;
+}
+
+.Close-button:hover {
+  cursor: pointer;
+  color: #444;
+}
+
 label {
   background-color: #636464;
   color:#000;
@@ -82,5 +136,9 @@ input[type="text"], textarea {
   text-align:right;
   background-color : #000; 
   color: #0f0
+}
+
+ul {
+  list-style-type:none;
 }
 
