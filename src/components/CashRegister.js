@@ -150,12 +150,27 @@ class CashRegister extends React.Component {
         });
 
         // grab and parse the response
-        let change = JSON.parse(response.responseJSON).change;
-        // update the change drawer
-        for (let i=0; i < change.length; i++) {
-            let bill = change[i];
-            this.billCounts[bill] = this.billCounts[bill] - 1;
+        let parseResponse = JSON.parse(response.responseJSON);
+        let change = parseResponse.change;
+        let responseBillCounts = parseResponse.bills;
+        console.log(responseBillCounts);
+
+        var updatedCounts = {}
+        let bills = [0.01, 0.05, 0.10, 0.25, 0.5, 1.00, 5.00, 10.00, 20.00]
+        for (let i=0; i < responseBillCounts.length; i++) {
+            updatedCounts[bills[i]] = responseBillCounts[i];
         }
+
+        // // update the change drawer
+        // var index = 0;
+        
+        // for (let bill in this.billCounts) {
+        //     console.log(bill);
+        //     updatedCounts[bill] = responseBillCounts[index];
+        //     index++;
+        // }
+        console.log("Updated counts: " + updatedCounts)
+        this.billCounts = updatedCounts;
 
         return change;
     }
