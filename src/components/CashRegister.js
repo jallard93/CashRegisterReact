@@ -2,17 +2,12 @@ import React from "react";
 import Display from "./Display.js"
 import RegisterButton from "./RegisterButton.js";
 import ChangeList from "./ChangeList"
-import $, { timers } from "jquery";
-
-/*
-TODO:
-    - Make pretty
-    - Finish writing out tests to be more general
-*/
+import $ from "jquery";
 
 class CashRegister extends React.Component {
     constructor(props) {
         super(props);
+        // set state variables
         this.state = {
             displayText: 0,
             prompt: "Purchase Price:",
@@ -22,21 +17,22 @@ class CashRegister extends React.Component {
             change: []
         };
 
+        // set API related varaibles
         this.purchase = 0;
         this.payment = 0;
-        this.billCounts = {
-            0.01: 10,
-            0.05: 10,
-            0.10: 10,
-            0.25: 10,
-            0.50: 10,
-            1.00: 10,
-            5.00: 10,
-            10.00: 10,
-            20.00: 10
+        this.billCounts = {0.01: 10,
+                           0.05: 10,
+                           0.10: 10,
+                           0.25: 10,
+                           0.50: 10,
+                           1.00: 10,
+                           5.00: 10,
+                           10.00: 10,
+                           20.00: 10
         }
         this.totalBills = Object.values(this.billCounts).reduce((a, b) => a + b, 0);
 
+        //bindings
         this.handleClick = this.handleClick.bind(this);
         this.handleEnter = this.handleEnter.bind(this);
         this.handleReset = this.handleReset.bind(this);
@@ -44,10 +40,10 @@ class CashRegister extends React.Component {
         this.handleOpenDrawer = this.handleOpenDrawer.bind(this);
     }
 
+    // handles resetting the ui and related variables/states
     handleReset() {
         this.purchase = 0;
         this.payment = 0;
-
         this.billCounts = {
             0.01: 10,
             0.05: 10,
@@ -70,6 +66,7 @@ class CashRegister extends React.Component {
         })
     }
 
+    // handle clicking of register character buttons
     handleClick(event) {
         // retrieve the number pressed from the click event
         let eventChar = event.nativeEvent.path[0].firstChild.data
@@ -80,7 +77,10 @@ class CashRegister extends React.Component {
         this.setState({ displayText: newText });
     }
 
+    // handle clicking of the enter button
     handleEnter() {
+        // if the purchase price flag is true
+        // and enter was clicked, store the current display and prompt for payment amount
         if (this.state.enteringPurchasePrice) {
             this.purchase = this.state.displayText;
             this.setState({
@@ -89,6 +89,8 @@ class CashRegister extends React.Component {
                 enteringPurchasePrice: !this.state.enteringPurchasePrice,
                 enteringPaymentPrice: !this.state.enteringPaymentPrice
             })
+        // if the payment price flag is true
+        // and enter was clicked, store the current display and call CashRegister API for change amount
         } else if (this.state.enteringPaymentPrice) {
             this.payment = this.state.displayText;
             // calculate new display text for change amount HERE
@@ -102,6 +104,7 @@ class CashRegister extends React.Component {
                 showChange: true,
                 change: changeArray
             })
+        // otherwise, prompt for purchase price again and reset states
         } else {
             this.setState({
                 displayText:0,
@@ -114,6 +117,7 @@ class CashRegister extends React.Component {
         }
     }
 
+    // handler for opening register drawer
     handleOpenDrawer() {
         let drawerOpen = !this.state.drawerOpen;
         this.setState({
@@ -121,13 +125,16 @@ class CashRegister extends React.Component {
         });
     }
 
+    // handler for closing change popup
     handleCloseButton() {
         this.setState({
             showChange:false
         });
     }
 
+    // function for calling the Cash Register API
     callCashRegisterApi() {
+        // use AJAX to call the API
         let response = $.ajax({
             url:'https://l6za7byfzc.execute-api.us-east-1.amazonaws.com/api/cashregister/change',
             async: false,
@@ -142,8 +149,8 @@ class CashRegister extends React.Component {
             method: "POST"
         });
 
+        // grab and parse the response
         let change = JSON.parse(response.responseJSON).change;
-
         // update the change drawer
         for (let i=0; i < change.length; i++) {
             let bill = change[i];
@@ -155,11 +162,11 @@ class CashRegister extends React.Component {
 
     parseDisplayText(displayText, eventChar) {
         let newText;
-
         // if the delete button was clicked, handle accordingly
         if (eventChar === "Delete") {
             newText = displayText.toString().length === 1 ? 0 : displayText.toString().slice(0, displayText.length - 1)
         }
+
         // check if current string is zero and handle accordingly 
         else if (displayText === 0 && eventChar !== ".") {
             newText = eventChar;
@@ -200,7 +207,7 @@ class CashRegister extends React.Component {
                 </div>
                 Cash Register Clerk Simulator
                 <div className="Cash-Register row">
-                    <div className="Register-buttons col-md-6">
+                    <div className="col-md-6">
                         <div className="container">
                             <div className="row">
                                 <RegisterButton name="1" onClick={this.handleClick} />

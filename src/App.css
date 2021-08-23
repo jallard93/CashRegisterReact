@@ -52,12 +52,6 @@
   font-family: "Courier", monospace;
 }
 
-.Register-drawers {
-  outline-style: solid;
-  outline-width: thin;
-  outline-color: black;
-}
-
 .Register-right {
   width: 50%;
   height: 50%;
@@ -96,21 +90,6 @@
   text-align: left;
   padding: 3%;
   font-family: "Courier", monospace;
-}
-
-.Change-button {
-  color: #fff;
-  background-color: #393f49;
-  border: none!important;
-  outline: none !important;
-  position: relative;
-  right: 50%;
-}
-
-.Change-button:hover {
-  background-color: #444;
-  outline: none !important;
-  cursor: pointer;
 }
 
 .Close-button {

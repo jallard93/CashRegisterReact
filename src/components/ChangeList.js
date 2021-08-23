@@ -7,6 +7,7 @@ class ChangeList extends React.Component{
         this.listItems = this.createList();
     }
 
+    // create a list of change items 
     createList() {
         let listItems = [];
         for (let bill in this.change) {
@@ -15,6 +16,7 @@ class ChangeList extends React.Component{
         return listItems;
     }
 
+    // reduce array of change values to object with mappings bill->bill counts
     reduceChange(change) {
         var changeObject = {}
 
@@ -31,15 +33,11 @@ class ChangeList extends React.Component{
 
     render() {
         return (
-            <div className="Change-display">
-                <ul>
-                    {this.listItems}
-                </ul>
+            <div>
+                <ul>{this.listItems}</ul>
             </div>
-                
         );
     }
-    
 }
 
 
